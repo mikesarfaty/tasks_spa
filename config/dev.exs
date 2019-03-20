@@ -68,7 +68,7 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :tasks_spa, TasksSpa.Repo,
-  username: "tasks-spa",
+  username: "tasks_spa",
   password: "bE3xbrS4cx9LU",
   database: "tasks_spa_dev",
   hostname: "localhost",
