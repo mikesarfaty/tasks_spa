@@ -19,8 +19,10 @@ defmodule TasksSpaWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", TasksSpaWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", TasksSpaWeb do
+    pipe_through :api
+    resources "/users", UserController, except: [:new, :edit]
+    resources "/tasks", TaskController, except: [:new, :edit]
+  end
+
 end
