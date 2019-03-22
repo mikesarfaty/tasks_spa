@@ -14,6 +14,7 @@ import jQuery from 'jquery';
 window.jQuery = window.$ = jQuery;
 import "bootstrap";
 import _ from "lodash";
+import store from './store'
 
 // Import local files
 //
@@ -24,5 +25,5 @@ import root_init from "./root";
 
 $(() => {
   let node = $('#root')[0];
-  root_init(node);
+  root_init(node, store);
 });

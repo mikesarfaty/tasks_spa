@@ -18,7 +18,10 @@ defmodule TasksSpa.Tasks.Tasks do
 
   """
   def list_tasks do
-    Repo.all(Task)
+    Repo.all(
+      from Task,
+        preload: [user: []]
+    )
   end
 
   @doc """

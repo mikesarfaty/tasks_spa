@@ -11,10 +11,25 @@ defmodule TasksSpaWeb.TaskView do
   end
 
   def render("task.json", %{task: task}) do
-    %{id: task.id,
-      title: task.title,
-      description: task.description,
-      time_spent: task.time_spent,
-      is_completed: task.is_completed}
+    case task.user do
+      %{:email => email} -> # has an email field
+        %{
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        time_spent: task.time_spent,
+        is_completed: task.is_completed,
+        assigned_to: task.user.email
+      }
+    _ ->
+      %{
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        time_spent: task.time_spent,
+        is_completed: task.is_completed,
+        assigned_to: ""
+      }
+    end
   end
 end

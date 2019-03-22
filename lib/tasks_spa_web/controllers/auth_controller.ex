@@ -1,3 +1,5 @@
+# ATTRIBUTION: NAT TUCK, IN CLASS, for many parts of this file.
+
 defmodule TasksSpaWeb.AuthController do
   use TasksSpaWeb, :controller
 
