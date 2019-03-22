@@ -14,11 +14,31 @@ class Root extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      email_form: {email: "", password: ""},
+      session: null,
       tasks: props.tasks,
       users: [],
     }
     this.fetch_tasks()
+  }
 
+  login() {
+    $.ajax("/api/auth", {
+      method: "post",
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      data: JSON.stringify(this.state.login_form),
+      success: (resp) => {
+        let state1 = _.assign({}, this.state, { session: resp.data });
+        this.setState(state1);
+      }
+    });
+  }
+
+  update_login_form(data) {
+    let form1 = _.assign({}, this.state.login_form, data);
+    let state1 = _.assign({}, this.state, { login_form: form1 });
+    this.setState(state1);
   }
 
   fetch_tasks() {
@@ -51,7 +71,7 @@ class Root extends React.Component {
     return <div>
       <Router>
         <div>
-          <Header root={this} />
+          <Header session={this.state.session} root={this} />
           <Route path="/" exact={true} render={() =>
             <TaskList tasks={this.state.tasks} />
           } />
@@ -65,28 +85,29 @@ class Root extends React.Component {
 }
 
 function Header(props) {
-  let { root } = props;
+  let {root, session} = props;
+  let session_info;
+  if (session == null) {
+    session_info = <div className="form-inline my-2">
+      <input type="email" placeholder="email"
+             onChange={(ev) => root.update_login_form({email: ev.target.value})} />
+      <input type="password" placeholder="password"
+             onChange={(ev) => root.update_login_form({password: ev.target.value})} />
+      <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
+    </div>;
+  }
+  else {
+    session_info = <div className="my-2">
+      <p>Logged in as {session.user_id}</p>
+    </div>
+  }
+
   return <div className="row my-2">
     <div className="col-6">
-      <h1>Task Tracker</h1>
-      <div className="col-4">
-        <h1><Link to={"/"}>Tasks</Link></h1>
-      </div>
-      <div className="col-2">
-        <p>
-          <Link to={"/users"}
-            onClick={root.fetch_users.bind(root)}>
-            Users
-                </Link>
-        </p>
-      </div>
-      <div className="col-6">
-        <div className="form-inline my-2">
-          <input type="email" placeholder="email" />
-          <input type="password" placeholder="password" />
-          <button className="btn btn-secondary">Login</button>
-        </div>
-      </div>
+      <h1>Husky Shop</h1>
+    </div>
+    <div className="col-6">
+      {session_info}
     </div>
   </div>;
 }
